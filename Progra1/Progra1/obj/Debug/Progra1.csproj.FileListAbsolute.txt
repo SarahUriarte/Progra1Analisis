@@ -1,0 +1,7 @@
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\bin\Debug\Progra1.exe.config
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\bin\Debug\Progra1.exe
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\bin\Debug\Progra1.pdb
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\obj\Debug\Progra1.csprojResolveAssemblyReference.cache
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\obj\Debug\Progra1.csproj.CoreCompileInputs.cache
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\obj\Debug\Progra1.exe
+C:\Users\Sarah\Documents\Visual Studio\Progra1\Progra1\obj\Debug\Progra1.pdb
