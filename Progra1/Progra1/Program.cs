@@ -12,10 +12,14 @@ namespace Progra1
         const int INFINITE = 99999999;
         //this is to track the parents of every node
         static List<int> parentTracker = new List<int>();
+        static int asignFF = 0;
+        static int compFF = 0;
 
+        //Start Graphs creation
         static int[,] minimalConnection(int size)
         {
             int[,] graph = new int[size, size];
+            
             Random rnd = new Random();
             for (int i = 0; i < graph.GetLength(0); i++)
             {
@@ -29,7 +33,7 @@ namespace Progra1
                 }
             }
 
-            int rowLength = graph.GetLength(0);
+            /*int rowLength = graph.GetLength(0);
             int colLength = graph.GetLength(1);
 
             for (int i = 0; i < rowLength; i++)
@@ -39,7 +43,7 @@ namespace Progra1
                     Console.Write(string.Format("{0} ", graph[i, j]));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
-            }
+            }*/
             return graph;
         }
         static int[,] stronglyConnected(int size)
@@ -56,7 +60,7 @@ namespace Progra1
                 }
             }
 
-            int rowLength = graph.GetLength(0);
+            /*int rowLength = graph.GetLength(0);
             int colLength = graph.GetLength(1);
 
             for (int i = 0; i < rowLength; i++)
@@ -66,10 +70,13 @@ namespace Progra1
                     Console.Write(string.Format("{0} ", graph[i, j]));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
-            }
+            }*/
             return graph;
         }
 
+        //End of grapg's creation
+
+        //Start Forf Fulkerson Algorthm
         static bool BreadthFirstSearch(int [,] residualGraph,int source, int sink, List<int>parentTracker, int arraySize)
         {
             Queue<int> queue = new Queue<int>();
@@ -77,27 +84,41 @@ namespace Progra1
             for (int i = 0; i < arraySize; i++)
             {
                 visited.Add(false);
+                compFF++;
+                asignFF++;
             }
+            asignFF++;
+            compFF++;
             queue.Enqueue(source);
             visited[source] = true;
             parentTracker[source] = -1;
-
+            asignFF += 2;
             while (queue.Count != 0){
+                compFF++;
                 int u = queue.Dequeue();
-
+                asignFF++;
                 for (int v = 0; v < arraySize ; v++)
                 {
+                    compFF++;
+                    asignFF++;
                     if (visited[v] == false & residualGraph[u,v] > 0)
                     {
                         queue.Enqueue(v);
                         visited[v] = true;
                         parentTracker[v] = u;
+                        compFF += 2;
+                        asignFF += 2;
+                    }
+                    else
+                    {
+                       compFF += 2;
                     }
                 }
 
             }
             if (visited[sink])
             {
+                compFF++;
                 return true;
             }
 
@@ -106,8 +127,8 @@ namespace Progra1
 
         static int FordFulkersonAlgorithm(int[,] Graph, int source, int sink, int arraySize)
         {
-            int u= 0;
-            int v = 0;
+            int u;
+            int v;
             int[,] residualGraph = Graph;
             int maxFlow = 0;
 
@@ -136,6 +157,8 @@ namespace Progra1
 
             return maxFlow;
         }
+        //End of Ford Fulkerson
+
 
         static void Main(string[] args)
         {
