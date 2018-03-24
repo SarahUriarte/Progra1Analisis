@@ -16,7 +16,8 @@ namespace Progra1
         static int asignFF = 0;
         //Variable to count the comparison of FordFulkerson
         static int compFF = 0;
-
+        //
+        static int stepsCountFF = 0;
         //Start Graphs creation
         //This methods receives the matrix size
         static int[,] minimalConnection(int size)
@@ -91,6 +92,7 @@ namespace Progra1
                 visited.Add(false);
                 compFF++;
                 asignFF++;
+                stepsCountFF++;
             }
             asignFF++;
             compFF++;
@@ -98,6 +100,7 @@ namespace Progra1
             visited[source] = true;
             parentTracker[source] = -1;
             asignFF += 2;
+            stepsCountFF += 4;
             while (queue.Count != 0){
                 compFF++;
                 int u = queue.Dequeue();
@@ -106,6 +109,7 @@ namespace Progra1
                 {
                     compFF++;
                     asignFF++;
+                    stepsCountFF++;
                     if (visited[v] == false & residualGraph[u,v] > 0)
                     {
                         queue.Enqueue(v);
@@ -113,6 +117,7 @@ namespace Progra1
                         parentTracker[v] = u;
                         compFF += 2;
                         asignFF += 2;
+                        stepsCountFF += 5;
                     }
                     else
                     {
@@ -124,6 +129,7 @@ namespace Progra1
             if (visited[sink])
             {
                 compFF++;
+                stepsCountFF += 2;
                 return true;
             }
 
@@ -137,24 +143,28 @@ namespace Progra1
             int v;
             int[,] residualGraph = Graph;
             int maxFlow = 0;
-            asignFF++;
+            asignFF += 2;
+            stepsCountFF += 2;
             while(BreadthFirstSearch(residualGraph, source,sink, parentTracker, arraySize))
             {
                 compFF++;
                 int pathFlow = INFINITE;
                 v = sink;
                 asignFF += 2;
-                while(v != source)
+                stepsCountFF += 2;
+                while (v != source)
                 {
                     u = parentTracker[v];
                     pathFlow = Math.Min(pathFlow, residualGraph[u, v]);
                     v = parentTracker[v];
                     compFF++;
                     asignFF += 3;
+                    stepsCountFF += 4;
                 }
                 compFF++;
                 v = sink;
                 asignFF++;
+                stepsCountFF += 4;
                 while (v != source)
                 {
                     u = parentTracker[v];
@@ -163,8 +173,10 @@ namespace Progra1
                     v = parentTracker[v];
                     compFF++;
                     asignFF += 4;
+                    stepsCountFF += 5;
                 }
                 maxFlow += pathFlow;
+                stepsCountFF++;
                 asignFF++;
             }
 
@@ -181,7 +193,7 @@ namespace Progra1
 
             /*int[,] graph = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
                                         {0,0,0,8,0,7},{0,0,0,0,0,0} };*/
-            int[,] graph = stronglyConnected(1000);
+            int[,] graph = stronglyConnected(10);
             int arraySize = graph.GetLength(0);
 
             for (int i = 0; i < arraySize; i++)
@@ -193,6 +205,7 @@ namespace Progra1
             Console.WriteLine("The maximun possible flow is "+ result);
             Console.WriteLine("Cantidad de asignaciones " + asignFF);
             Console.WriteLine("Cantidad de comparaciones " + compFF);
+            Console.WriteLine("Cantidad de pasos " + stepsCountFF);
             Console.ReadKey();
         }
     }
