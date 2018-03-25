@@ -18,6 +18,12 @@ namespace Progra1
         static int compFF = 0;
         //
         static int stepsCountFF = 0;
+
+        static List<int> level = new List<int>();
+        static int aD = 0;
+        static int cD = 0;
+
+
         //Start Graphs creation
         //This methods receives the matrix size
         static int[,] minimalConnection(int size)
@@ -185,15 +191,92 @@ namespace Progra1
         }
         //End of Ford Fulkerson
 
+        //Start of Dinics
+        static bool Bfs(int[,] graph, int[,] matrix, int start, int final)
+        {
+            int size = graph.GetLength(0) - 1;
+            Queue<int> queue = new Queue<int>();
+            queue.Enqueue(start);
+            for (int i = 0; i < size + 1; i++)
+            {
+                level.Add(0);
+            }
+            level[start] = 1;
+            aD += 4;
+            while (queue.Count() != 0)
+            {
+                int k = queue.Dequeue();
+                for (int i = 0; i <= size; i++)
+                {
+                    if ((matrix[k, i] < graph[k, i]) & (level[i] == 0))
+                    {
+                        level[i] = level[k] + 1;
+                        queue.Enqueue(i);
+                    }
+                }
+
+            }
+            return level[final] > 0;
+
+        }
+        static int Dfs(int[,] graph, int[,] matrix, int k, int cp)
+        {
+            int temp = cp;
+            if (k == graph.GetLength(0) - 1)
+            {
+                return cp;
+            }
+            for (int i = 0; i <= graph.GetLength(0) - 1; i++)
+            {
+                if ((level[i] == level[k] + 1) & (matrix[k, i] < graph[k, i]))
+                {
+                    int f = Dfs(graph, matrix, i, Math.Min(temp, graph[k, i] - matrix[k, i]));
+                    matrix[k, i] = matrix[k, i] + f;
+                    matrix[i, k] = matrix[i, k] - f;
+                    temp = temp - f;
+                }
+
+            }
+            return cp - temp;
+
+        }
+        static int maxFlow(int[,] graph, int start, int final)
+        {
+            int n = graph.GetLength(0);
+
+
+            int[,] matrix = new int[n, n];
+            for (int i = 0; i >= n; i++)
+            {
+                for (int j = 0; j >= n; j++)
+                {
+                    matrix[i, j] = 0;
+                }
+            }
+
+
+            int flow = 0;
+            while (Bfs(graph, matrix, start, final))
+            {
+                flow = flow + Dfs(graph, matrix, start, 100000);
+                level.Clear();
+            }
+            return flow;
+
+
+        }
 
         static void Main(string[] args)
         {
             //int[,] graph = new int[,] { {0,10,10,0,0,0},{0,0,2,4,8,0},{0,0,0,0,9,0},{0,0,0,0,0,10},
             //                           {0,0,0,6,0,10},{0,0,0,0,0,0} };
 
-            /*int[,] graph = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
-                                        {0,0,0,8,0,7},{0,0,0,0,0,0} };*/
-            int[,] graph = stronglyConnected(10);
+            int[,] graph = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
+                                        {0,0,0,8,0,7},{0,0,0,0,0,0} };
+            int[,] graphi = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
+                                        {0,0,0,8,0,7},{0,0,0,0,0,0} };
+           // int[,] graph = minimalConnection(10);
+            //int[,] graphi = graph;
             int arraySize = graph.GetLength(0);
 
             for (int i = 0; i < arraySize; i++)
@@ -206,6 +289,13 @@ namespace Progra1
             Console.WriteLine("Cantidad de asignaciones " + asignFF);
             Console.WriteLine("Cantidad de comparaciones " + compFF);
             Console.WriteLine("Cantidad de pasos " + stepsCountFF);
+            Console.WriteLine("**************************************");
+            Console.WriteLine();
+            Console.WriteLine("Dinic's Algorithm");
+            int start = 0;
+            int final = 5;
+            int max_flow_value = maxFlow(graphi, start, final);
+            Console.WriteLine("max_flow_value is " + max_flow_value);
             Console.ReadKey();
         }
     }
