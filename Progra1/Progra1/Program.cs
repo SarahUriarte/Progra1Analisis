@@ -265,18 +265,35 @@ namespace Progra1
 
 
         }
+        static int [,] copiarGrafo(int[,] grafol)
+        {
+            int tm = grafol.GetLength(0);
+            int[,] graph = new int[tm, tm];
+            for (int i = 0; i < graph.GetLength(0); i++)
+            {
+                for (int j = 0; j < graph.GetLength(1); j++)
+                {
+
+                    graph[i, j] = grafol[i, j];
+
+                }
+            }
+            return graph;
+        }
 
         static void Main(string[] args)
         {
             //int[,] graph = new int[,] { {0,10,10,0,0,0},{0,0,2,4,8,0},{0,0,0,0,9,0},{0,0,0,0,0,10},
             //                           {0,0,0,6,0,10},{0,0,0,0,0,0} };
 
-            int[,] graph = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
+            /*int[,] graph = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
                                         {0,0,0,8,0,7},{0,0,0,0,0,0} };
             int[,] graphi = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
-                                        {0,0,0,8,0,7},{0,0,0,0,0,0} };
-           // int[,] graph = minimalConnection(10);
-            //int[,] graphi = graph;
+                                        {0,0,0,8,0,7},{0,0,0,0,0,0} };*/
+            int[,] graph = stronglyConnected(1000);
+            int[,] graphCopy = copiarGrafo(graph);
+
+
             int arraySize = graph.GetLength(0);
 
             for (int i = 0; i < arraySize; i++)
@@ -294,7 +311,7 @@ namespace Progra1
             Console.WriteLine("Dinic's Algorithm");
             int start = 0;
             int final = 5;
-            int max_flow_value = maxFlow(graphi, start, final);
+            int max_flow_value = maxFlow(graphCopy, start, arraySize - 1);
             Console.WriteLine("max_flow_value is " + max_flow_value);
             Console.ReadKey();
         }
