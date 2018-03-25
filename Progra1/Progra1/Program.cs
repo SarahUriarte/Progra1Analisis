@@ -23,16 +23,16 @@ namespace Progra1
         static int aD = 0;
         static int cD = 0;
 
-
+        
         //Start Graphs creation
         //This methods receives the matrix size
         static int[,] minimalConnection(int size)
         {
             int[,] graph = new int[size, size];
             Random rnd = new Random();
-            for (int i = 0; i < graph.GetLength(0); i++)
+            for (int i = 0; i < graph.GetLength(0)-1; i++)
             {
-                for (int j = 0; j < graph.GetLength(1); j++)
+                for (int j = 1; j < graph.GetLength(1); j++)
                 {
                     if (j == i+1)
                     {
@@ -41,7 +41,7 @@ namespace Progra1
                 }
             }
 
-            /*int rowLength = graph.GetLength(0);
+            int rowLength = graph.GetLength(0);
             int colLength = graph.GetLength(1);
 
             for (int i = 0; i < rowLength; i++)
@@ -51,16 +51,16 @@ namespace Progra1
                     Console.Write(string.Format("{0} ", graph[i, j]));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
-            }*/
+            }
             return graph;
         }
         static int[,] stronglyConnected(int size)
         {
             int[,] graph = new int[size, size];
             Random rnd = new Random();
-            for (int i = 0; i < graph.GetLength(0); i++)
+            for (int i = 0; i < graph.GetLength(0)-1; i++)
             {
-                for (int j = 0; j < graph.GetLength(1); j++)
+                for (int j = 1; j < graph.GetLength(1); j++)
                 {
                     
                    graph[i, j] = rnd.Next(1, 15);
@@ -68,7 +68,7 @@ namespace Progra1
                 }
             }
 
-            /*int rowLength = graph.GetLength(0);
+            int rowLength = graph.GetLength(0);
             int colLength = graph.GetLength(1);
 
             for (int i = 0; i < rowLength; i++)
@@ -78,16 +78,88 @@ namespace Progra1
                     Console.Write(string.Format("{0} ", graph[i, j]));
                 }
                 Console.Write(Environment.NewLine + Environment.NewLine);
-            }*/
+            }
+            return graph;
+        }
+        static bool vertexList(List<int> list, int num)
+        {
+            int cant = list.Where(x => x == num).Count();
+            if (cant > 0)
+            {
+                return false;
+            }
+           return true;
+        }
+
+        static bool repeatedCount(List<int> list, int num)
+        {
+            int cant = list.Where(x => x == num).Count();
+            if (cant > 3)
+            {
+                return false;
+            }
+            return true;
+        }
+        static int vertex(int num, int size)
+        {
+            Random rnd = new Random();
+            while (true)
+            {
+                int vert = rnd.Next(1, size);
+                if (num != vert & vert != 0)
+                {
+                    return vert;
+                }
+            }
+        }
+        static int[,] threeConnections(int size)
+        {
+            int[,] graph = new int[size, size];
+            List<int> personalVertex = new List<int>();
+            List<int> generalVertex = new List<int>();
+            Random rnd = new Random();
+            for (int i = 0; i < graph.GetLength(0)-1; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    while (true)
+                    {
+                        int vert = vertex(i, size);
+                        if (vertexList(personalVertex, vert))
+                        {
+                            if (repeatedCount(generalVertex, vert))
+                            {
+                                personalVertex.Add(vert);
+                                generalVertex.Add(vert);
+                                graph[i, vert] = rnd.Next(1, 15);
+                                break;
+                            }
+                        }
+                    }
+                }
+                personalVertex.Clear();
+            }
+            int rowLength = graph.GetLength(0);
+            int colLength = graph.GetLength(1);
+
+            for (int i = 0; i < rowLength; i++)
+            {
+                for (int j = 0; j < colLength; j++)
+                {
+                    Console.Write(string.Format("{0} ", graph[i, j]));
+                }
+                Console.Write(Environment.NewLine + Environment.NewLine);
+            }
             return graph;
         }
 
-        //End of graph's creation
 
-        //Start Forf Fulkerson Algorthm
-        /*This method receives a copy of the graph, the source, the sink, a the global list to track the 
-         parents and the amount of vertex*/
-        static bool BreadthFirstSearch(int [,] residualGraph,int source, int sink, List<int>parentTracker, int arraySize)
+            //End of graph's creation
+
+            //Start Forf Fulkerson Algorthm
+            /*This method receives a copy of the graph, the source, the sink, a the global list to track the 
+             parents and the amount of vertex*/
+            static bool BreadthFirstSearch(int [,] residualGraph,int source, int sink, List<int>parentTracker, int arraySize)
         {
             Queue<int> queue = new Queue<int>();
             List<bool> visited = new List<bool>();
@@ -290,7 +362,7 @@ namespace Progra1
                                         {0,0,0,8,0,7},{0,0,0,0,0,0} };
             int[,] graphi = new int[,] { {0,9,9,0,0,0},{0,0,10,8,0,0},{0,0,0,1,3,0},{0,0,0,0,0,10},
                                         {0,0,0,8,0,7},{0,0,0,0,0,0} };*/
-            int[,] graph = stronglyConnected(1000);
+            int[,] graph = stronglyConnected(10);
             int[,] graphCopy = copiarGrafo(graph);
 
 
@@ -314,6 +386,19 @@ namespace Progra1
             int max_flow_value = maxFlow(graphCopy, start, arraySize - 1);
             Console.WriteLine("max_flow_value is " + max_flow_value);
             Console.ReadKey();
+
+            //int cantidad = a.Where(x => x == 1).Count();
+            /*Console.WriteLine("Minimal connections");
+            minimalConnection(10);
+            Console.WriteLine();
+            Console.WriteLine("Three connections");
+            threeConnections(10);
+            Console.WriteLine();
+            Console.WriteLine("Strongly connections");
+            stronglyConnected(10);
+            Console.WriteLine();
+
+            Console.ReadKey();*/
         }
     }
 }
